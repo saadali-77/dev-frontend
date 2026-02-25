@@ -1,10 +1,11 @@
-import { New } from "./new"
+
 import './index.css'
-import Navbar from './Navbar'
-import Body from "./body"
+
+import Body from "./components/body"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import Login from './login'
-import Profile from "./Profile"
+import {Login} from './components/login'
+import Profile from "./components/Profile"
+import { Feed } from "./components/Feed"
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Body />}>
-        
+        <Route  path="/feed" element={<Feed/>} />
         <Route path="/login" element={<Login />} />
         
         <Route path="/profile" element={<Profile />} />
