@@ -3,7 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../appStore/userSlice";
 import { BASE_URL } from "../appStore/constant";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 export const  Login= ()=> {
   const [form, setForm] = useState({
     emailId: "jack@gmail.com",
@@ -75,6 +75,12 @@ const Navigate= useNavigate()
           >
             Login
           </button>
+          <Link
+  to="/signup"
+  className="block text-center text-white/80 hover:underline mt-3"
+>
+  Don’t have an account? Signup
+</Link>
         </form>
       </div>
     </div>

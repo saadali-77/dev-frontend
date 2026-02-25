@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import {Login} from './components/login'
 import Profile from "./components/Profile"
 import { Feed } from "./components/Feed"
-
+import { Signup } from './components/Signup'
 function App() {
   return (
     <BrowserRouter>
@@ -19,6 +19,7 @@ function App() {
         
         <Route path="/profile" element={<Profile />} />
         </Route>
+        <Route path='/signup' element={<Signup/>}/>
       </Routes>
 
       {/* <h1 className="text-4xl font-bold text-blue-500">
