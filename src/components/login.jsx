@@ -9,6 +9,7 @@ export const  Login= ()=> {
     emailId: "jack@gmail.com",
     password: "jack5912@",
   });
+  const [error,setError]=useState("")
   const dispatch= useDispatch()
 const Navigate= useNavigate()
   const handleChange = (e) => {
@@ -31,7 +32,7 @@ const Navigate= useNavigate()
       dispatch(addUser(res.data))
       return Navigate('/feed')
     } catch (err) {
-      console.log(err.response?.data || err.message);
+      setError(err.response?.data || err.message);
     }
   };
 
@@ -67,7 +68,7 @@ const Navigate= useNavigate()
               className="w-full mt-1 px-4 py-3 rounded-xl bg-white/30 text-white border border-white/40 focus:ring-2 focus:ring-white"
             />
           </div>
-
+        <h2 className="text-red-400 font-bold">{error}</h2>
           {/* ⭐ submit button */}
           <button
             type="submit"

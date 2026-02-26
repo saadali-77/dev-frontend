@@ -1,10 +1,34 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useEffect } from 'react'
+import { BASE_URL } from '../appStore/constant'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateFeed } from '../appStore/feedSlice'
+import { store } from '../appStore/store'
+import { UserCard } from './UserCard'
 
  export const Feed  = () => {
-  return (
-    <div> 
-        <h2>feed page components</h2>
-    </div>
+  const feedSelector= useSelector(store=>store.feed)
+  console.log(feedSelector)
+  const dispatch= useDispatch()
+const getFeed= async()=>{
+try{
+  if(feedSelector) return;
+  const res= await axios.get(BASE_URL + '/user/feed',{withCredentials:true})
+ dispatch(updateFeed(res.data))
+}catch(err){
+  console.log(err.message)
+}
+
+}
+useEffect(()=>{
+getFeed()
+},[])
+
+  return ( feedSelector && (
+    <div className='flex justify-center my-10'> 
+      
+        <UserCard user={feedSelector[0]}/>
+    </div>)
   )
 }
 
