@@ -1,9 +1,13 @@
 
 import React from 'react'
-
+import { EditProfile } from './EditProfile'
 const Profile = () => {
   return (
-    <div>Profile components</div>
+    <div>Profile components
+
+
+      <EditProfile/>
+    </div>
   )
 }
 
