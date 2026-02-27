@@ -2,11 +2,24 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { BASE_URL } from "../appStore/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../appStore/RequestSlice";
+import { addRequests, removeRequests } from "../appStore/RequestSlice";
 
 export const Requests = () => {
   const dispatch = useDispatch();
   const requests = useSelector((store) => store.request);
+const reviewRequest = async (status, _id) => {
+    try {
+       await axios.post(
+        BASE_URL + "/request/review" + "/" + status + "/" + _id,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeRequests(_id));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
 
   // Fetch incoming requests
   const fetchRequests = async () => {
@@ -86,10 +99,10 @@ export const Requests = () => {
 
               {/* Action Buttons */}
               <div className="flex gap-3 mt-3">
-                <button className="flex-1 py-2 rounded-xl bg-yellow-300 text-yellow-900 font-semibold shadow hover:scale-105 transition-transform duration-300">
+                <button className="flex-1 py-2 rounded-xl bg-yellow-300 text-yellow-900 font-semibold shadow hover:scale-105 transition-transform duration-300" onClick={()=>reviewRequest("accepted",user._id)}>
                   accept
                 </button>
-                <button className="flex-1 py-2 rounded-xl bg-red-300 text-red-900 font-semibold shadow hover:bg-red-400 transition-colors duration-300">
+                <button className="flex-1 py-2 rounded-xl bg-red-300 text-red-900 font-semibold shadow hover:bg-red-400 transition-colors duration-300" onClick={()=>reviewRequest("ignored",user.toUserId._id)}>
                   Reject
                 </button>
               </div>

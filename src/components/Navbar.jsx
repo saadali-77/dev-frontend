@@ -13,6 +13,15 @@ export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+
+
+
+
+
+
+
+
+  
   const handleLogout = async () => {
     try {
       await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
