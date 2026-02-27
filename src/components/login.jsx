@@ -6,8 +6,8 @@ import { BASE_URL } from "../appStore/constant";
 import { Link, useNavigate } from "react-router-dom";
 export const  Login= ()=> {
   const [form, setForm] = useState({
-    emailId: "armant@gmail.com",
-    password: "armant5912@",
+    emailId: "khabib@gmail.com",
+    password: "khabib5912@",
   });
   const [error,setError]=useState("")
   const dispatch= useDispatch()

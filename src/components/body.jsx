@@ -4,12 +4,14 @@ import {Footer} from '../components/Footer'
 import { Outlet, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL } from '../appStore/constant'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addUser } from '../appStore/userSlice'
 const Body = () => {
   const Navigate= useNavigate()
   const dispatch= useDispatch()
+  const userstore= useSelector(store=>store.user)
 const fetchUser= async()=>{
+  if(userstore) return;
     try{ const res= await axios.get(BASE_URL + '/profile/view',{
       withCredentials:true
     })
