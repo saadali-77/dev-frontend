@@ -24,12 +24,8 @@ export const EditProfile = () => {
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
 
-  // Input change
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  // Skills logic
   const addSkill = () => {
     const skill = skillInput.trim();
     if (!skill || form.skills.includes(skill)) return;
@@ -37,30 +33,23 @@ export const EditProfile = () => {
     setSkillInput("");
   };
 
-  const removeSkill = (skill) => {
-    setForm({ ...form, skills: form.skills.filter((s) => s !== skill) });
-  };
+  const removeSkill = (skill) => setForm({ ...form, skills: form.skills.filter((s) => s !== skill) });
 
-  // Optional photo URL validation
-  const validatePhotoUrl = (url) => {
-    return new Promise((resolve) => {
+  const validatePhotoUrl = (url) =>
+    new Promise((resolve) => {
       if (!url) return resolve(true);
       const img = new Image();
       img.onload = () => resolve(true);
       img.onerror = () => resolve(false);
       img.src = url;
     });
-  };
 
-  // Save profile
   const saveProfile = async () => {
     setError("");
     try {
-      // 1️⃣ Validate photo URL
       const isValidPhoto = await validatePhotoUrl(form.photoUrl);
       if (!isValidPhoto) console.warn("Photo URL seems invalid, but saving anyway.");
 
-      // 2️⃣ Validate required fields
       if (!form.firstName || !form.lastName) {
         setError("First and Last name are required.");
         return;
@@ -71,28 +60,17 @@ export const EditProfile = () => {
         return;
       }
 
-      // 3️⃣ Prepare payload
       const payload = { ...form };
-
-      // Only send password if entered
       if (!payload.password) delete payload.password;
-
-      // Remove empty strings or empty arrays
       Object.keys(payload).forEach((key) => {
-        if (payload[key] === "" || (Array.isArray(payload[key]) && payload[key].length === 0)) {
-          delete payload[key];
-        }
+        if (payload[key] === "" || (Array.isArray(payload[key]) && payload[key].length === 0)) delete payload[key];
       });
 
-      // 4️⃣ Make PATCH request
       const response = await axios.patch(`${BASE_URL}/profile/edit`, payload, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         withCredentials: true,
       });
 
-      // 5️⃣ Update redux and show toast
       dispatch(addUser(response.data.user));
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
@@ -102,7 +80,6 @@ export const EditProfile = () => {
     }
   };
 
-  // Form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     await saveProfile();
@@ -162,7 +139,7 @@ export const EditProfile = () => {
               onChange={handleChange}
               className="input input-bordered w-full bg-white/5 text-white"
             >
-              <option value="">Select gender</option>
+              <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>

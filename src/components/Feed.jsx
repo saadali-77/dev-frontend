@@ -23,6 +23,12 @@ try{
 useEffect(()=>{
 getFeed()
 },[])
+if(!feedSelector) return;
+if (feedSelector.length===0) return <h2 className='flex justify-center mt-30 text-bold text-green-400'>no more user found</h2>
+  
+
+
+
 
   return ( feedSelector && (
     <div className='flex justify-center my-10'> 

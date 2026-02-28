@@ -3,67 +3,74 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../appStore/constant";
 
-export  function Signup() {
+export function Signup() {
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     emailId: "",
     password: "",
+    age: "",
+    gender: "",
+    photoUrl: "",
+    about: "",
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: name === "age" ? Number(value) : value });
   };
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      await axios.post(BASE_URL + "/signup", form, {
-        withCredentials: true,
-      });
-      navigate("/feed");
+      await axios.post(BASE_URL + "/signup", form, { withCredentials: true });
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+        navigate("/login");
+      }, 2000);
     } catch (err) {
       console.log(err.response?.data || err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-<div className="min-h-screen flex items-center justify-center p-4
-bg-slate-950 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),
-linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)]
-bg-[size:40px_40px]">
-      {/* Card */}
-      <div className="backdrop-blur-lg bg-white/20 shadow-2xl rounded-2xl w-full max-w-md p-8 border border-white/30">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900">
+
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-8 shadow-2xl">
         
-        {/* Heading */}
-        <h2 className="text-3xl font-bold text-white text-center mb-6">
-          Create Account 
+        <h2 className="text-3xl font-extrabold text-center text-white mb-8 tracking-wide">
+          Create Account
         </h2>
 
-        {/* Form */}
         <form onSubmit={handleSignup} className="space-y-5">
-          
-          {/* Name Row */}
-          <div className="grid grid-cols-2 gap-3">
+
+          {/* Name */}
+          <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
               name="firstName"
-              placeholder="First name"
+              placeholder="First Name"
               value={form.firstName}
               onChange={handleChange}
               required
-              className="px-4 py-3 rounded-xl bg-white/30 text-white placeholder-white/70 border border-white/40 focus:ring-2 focus:ring-white outline-none"
+              className="px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
             />
             <input
               type="text"
               name="lastName"
-              placeholder="Last name"
+              placeholder="Last Name"
               value={form.lastName}
               onChange={handleChange}
               required
-              className="px-4 py-3 rounded-xl bg-white/30 text-white placeholder-white/70 border border-white/40 focus:ring-2 focus:ring-white outline-none"
+              className="px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
             />
           </div>
 
@@ -71,11 +78,11 @@ bg-[size:40px_40px]">
           <input
             type="email"
             name="emailId"
-            placeholder="Email address"
+            placeholder="Email Address"
             value={form.emailId}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-xl bg-white/30 text-white placeholder-white/70 border border-white/40 focus:ring-2 focus:ring-white outline-none"
+            className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
           />
 
           {/* Password */}
@@ -86,27 +93,79 @@ bg-[size:40px_40px]">
             value={form.password}
             onChange={handleChange}
             required
-            className="w-full px-4 py-3 rounded-xl bg-white/30 text-white placeholder-white/70 border border-white/40 focus:ring-2 focus:ring-white outline-none"
+            className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
+          />
+
+          {/* Age + Gender */}
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="number"
+              name="age"
+              placeholder="Age"
+              value={form.age}
+              onChange={handleChange}
+              required
+              className="px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
+            />
+            <select
+              name="gender"
+              value={form.gender}
+              onChange={handleChange}
+              required
+              className="px-4 py-3 rounded-xl bg-gray-500 text-white border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+
+          {/* Photo URL */}
+          <input
+            type="text"
+            name="photoUrl"
+            placeholder="Profile Photo URL"
+            value={form.photoUrl}
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition"
+          />
+
+          {/* About */}
+          <textarea
+            name="about"
+            placeholder="Write something about yourself..."
+            value={form.about}
+            onChange={handleChange}
+            rows="3"
+            className="w-full px-4 py-3 rounded-xl bg-white/20 text-white placeholder-gray-300 border border-white/30 focus:ring-2 focus:ring-purple-400 outline-none transition resize-none"
           />
 
           {/* Button */}
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-white text-purple-600 font-semibold hover:scale-105 transition duration-300 shadow-lg"
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-gray-900 text-white font-semibold hover:scale-105 transition duration-300 shadow-lg disabled:opacity-60"
           >
-            Signup
+            {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-white/80 text-sm text-center mt-5">
+        <p className="text-gray-300 text-sm text-center mt-6">
           Already have an account?
-          <Link to="/login" className="font-semibold hover:underline ml-1">
+          <Link to="/login" className="text-white-400 font-semibold hover:underline ml-1">
             Login
           </Link>
         </p>
       </div>
+
+      {/* Toast */}
+      {showToast && (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <div className="bg-green-500 text-white px-6 py-3 rounded-xl shadow-xl animate-bounce">
+            🎉 Account created successfully!
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
