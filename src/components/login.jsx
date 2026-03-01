@@ -21,7 +21,7 @@ const Navigate= useNavigate()
 
     try {
       const res = await axios.post(
-          BASE_URL + "/login",
+          BASE_URL + "/api/login",
         {
           emailId: form.emailId,
           password: form.password,
