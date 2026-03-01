@@ -12,7 +12,7 @@ const Body = () => {
   const userstore= useSelector(store=>store.user)
 const fetchUser= async()=>{
   if(userstore) return;
-    try{ const res= await axios.get(BASE_URL + '/profile/view',{
+    try{ const res= await axios.get(BASE_URL + 'api/profile/view',{
       withCredentials:true
     })
   dispatch(addUser(res.data))
