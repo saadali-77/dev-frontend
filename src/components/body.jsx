@@ -1,40 +1,48 @@
-import React, { useEffect } from 'react'
-import {Navbar} from '../components/Navbar'
-import {Footer} from '../components/Footer'
-import { Outlet, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { BASE_URL } from '../appStore/constant'
-import { useDispatch, useSelector } from 'react-redux'
-import { addUser } from '../appStore/userSlice'
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
+import { BASE_URL } from "../appStore/constant";
+import { addUser } from "../appStore/userSlice";
+
 const Body = () => {
-  const Navigate= useNavigate()
-  const dispatch= useDispatch()
-  const userstore= useSelector(store=>store.user)
-const fetchUser= async()=>{
-  if(userstore) return;
-    try{ const res= await axios.get(BASE_URL + '/profile/view',{
-      withCredentials:true
-    })
-  dispatch(addUser(res.data))
-  }catch(err){
-    if(err.status===401){
-   Navigate('/login')
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useSelector((store) => store.user);
+
+  const fetchUser = async () => {
+    if (user) return;
+
+    try {
+      const res = await axios.get(`${BASE_URL}/profile/view`, {
+        withCredentials: true,
+      });
+
+      dispatch(addUser(res.data));
+    } catch (err) {
+      console.error(err);
+
+      if (err.response?.status === 401) {
+        navigate("/login");
+      }
     }
-      console.log(err.message)
-    }
-}
-useEffect(()=>{
-fetchUser()
-},[])
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
   return (
     <div>
-        <Navbar/>
-        
-        <Outlet/>
-
-<Footer/>
+      <Navbar />
+      <Outlet />
+      <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Body
+export default Body;
